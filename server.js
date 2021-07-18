@@ -13,8 +13,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // app.use(routes);
 // const employees = require('./routes/employee');
 // app.use('/employees', employees);
-
-const mongoConnecion = require('./db/mongoDb');
+const mongoConnecion = require('./db/mongoDb')(process.env.DB_NAME);
 
 app.listen(process.env.PORT, () => {
 	console.log(chalk.yellow('Listening On Port ' + process.env.PORT));
