@@ -1,5 +1,5 @@
 const path = '/home/test/api';
-const { isAuthenticated } = require('../helpers/auth');
+const { isAuthenticated } = require('../services/auth');
 const config = (router) => {
     router
         // .use(isAuthenticated)
