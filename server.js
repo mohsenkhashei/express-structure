@@ -1,17 +1,24 @@
-const _ = require('./config/constant');
-require('dotenv').config({ path: _.CONFIG_FILE });
+require('dotenv').config({ path: `config/.env.${process.env.NODE_ENV}` });
 const express = require('express');
 const app = express();
 const chalk = require('chalk');
 const path = require('path');
 
-// app.use(express.bodyParser());
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'ejs');
+// logging
+const morganMiddleware = require('./middleware/morganMiddleware');
+app.use(morganMiddleware);
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 // app.use(express.static(path.join(__dirname, 'public')));
 require('./routes')(app);
+app.use(express.urlencoded({ extended: false }));
 
-const mongoConnecion = require('./db/mongoDb')(process.env.DB_NAME);
+// session
+const session = require('./config/session');
+app.use(session);
+
+const mongoConnecion = require('./db/mongoDb')(process.env.MONGODB_NAME);
 
 app.listen(process.env.PORT, () => {
     console.log(chalk.yellow('Listening On Port ' + process.env.PORT));
