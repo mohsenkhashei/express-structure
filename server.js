@@ -3,7 +3,7 @@ const session = require('express-session');
 const app = express();
 const flash = require('connect-flash');
 const cookieParser = require('cookie-parser');
-
+const path = require('path');
 require('dotenv').config({ path: `config/.env.${process.env.NODE_ENV}` });
 const chalk = require('chalk');
 const passport = require('passport');
@@ -13,9 +13,8 @@ require('./db/mongoDb')(process.env.MONGODB_NAME);
 
 const morganMiddleware = require('./middleware/morganMiddleware');
 app.use(morganMiddleware);
-
-// app.set('views', path.join(__dirname, 'views'));
-// app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
+app.set('views', path.join(__dirname, 'views'));
 
 app.use(
     session({
@@ -29,6 +28,7 @@ app.use(
 );
 app.use(cookieParser());
 app.use(flash());
+
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 passport.use(new LocalStrategy(User.authenticate()));
