@@ -13,11 +13,10 @@ const fs = require('fs');
 module.exports = (app) => {
     fs.readdirSync(__dirname).forEach((file) => {
         if (file === 'index.js') return;
-        const router = express.Router();
         const routeModule = require(path.join(__dirname, file));
-
         const pathFile = routeModule.path || '/';
-        const route = routeModule.config(router);
+
+        const route = routeModule.config(express.Router());
 
         app.use(pathFile, route);
     });
